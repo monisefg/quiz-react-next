@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const Widget = styled.div`
   margin-top: 24px;
@@ -54,13 +54,18 @@ Widget.Topic = styled.a`
   outline: 0;
   text-decoration: none;
   color: ${({ theme }) => theme.colors.contrastText};
-  background-color: ${({ theme }) => `${theme.colors.primary}40`};
+  background-color: ${({ theme }) => `${theme.colors.primary}`};
   padding: 10px 15px;
   margin-bottom: 8px;
   cursor: pointer;
   border-radius: ${({ theme }) => theme.borderRadius};
   transition: 0.3s;
   display: block;
+  ${({ selected }) =>
+    selected &&
+    css`
+      border: 1px solid;
+    `}
 
   &:hover,
   &:focus {

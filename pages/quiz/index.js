@@ -1,28 +1,48 @@
 import React from 'react';
-import db from '../db.json';
-import Widget from '../src/components/Widget';
-import QuizLogo from '../src/components/QuizLogo';
-import QuizBackground from '../src/components/QuizBackground';
-import QuizContainer from '../src/components/QuizContainer';
-import Button from '../src/components/Button';
-import AlternativesForm from '../src/components/AlternativesForm';
+import db from '../../db.json';
+import Widget from '../../src/components/Widget';
+import QuizLogo from '../../src/components/QuizLogo';
+import QuizBackground from '../../src/components/QuizBackground';
+import QuizContainer from '../../src/components/QuizContainer';
+import Button from '../../src/components/Button';
+import AlternativesForm from '../../src/components/AlternativesForm';
+import BackLinkArrow from '../../src/components/BackLinkArrow';
+import { useRouter } from 'next/router';
+import { Lottie } from '@crello/react-lottie';
+import animation from '../../src/screens/Quiz/animations/LoadingMonise.json';
 
 function LoadingWidget() {
   return (
     <Widget>
       <Widget.Header>Carregando...</Widget.Header>
 
-      <Widget.Content>[Desafio do Loading]</Widget.Content>
+      <Widget.Content style={{ display: 'flex', justifyContent: 'center' }}>
+        <Lottie
+          width="200px"
+          height="200px"
+          className="lottie-container basic"
+          config={{
+            animationData: animation,
+            loop: true,
+            autoplay: true,
+          }}
+        />
+      </Widget.Content>
     </Widget>
   );
 }
 function ResultWidget({ results }) {
+  const router = useRouter();
+  let name = router.query.name;
+  const firstLetter = name[0].toUpperCase();
+  const formatedName = name.replace(name[0], firstLetter);
+
   return (
     <Widget>
-      <Widget.Header>Carregando...</Widget.Header>
+      <Widget.Header>Resultado:</Widget.Header>
 
       <Widget.Content>
-        <span>Você acertou </span>
+        <span>{formatedName}, você acertou </span>
         {results.reduce((acc, curr) => {
           return curr ? acc + 1 : acc;
         }, 0)}
@@ -30,7 +50,7 @@ function ResultWidget({ results }) {
         <ul>
           Resultado:
           {results.map((result, index) => (
-            <li>
+            <li key={index}>
               Questão {index + 1}:{result === true ? ' Acertou' : ' Errou'}
             </li>
           ))}
@@ -58,7 +78,7 @@ function QuestionWidget({
   return (
     <Widget>
       <Widget.Header>
-        {/* <BackLinkArrow href="/" /> */}
+        <BackLinkArrow href="/" />
         <h3>{`Pergunta ${questionIndex + 1} de ${totalQuestions}`}</h3>
       </Widget.Header>
 
@@ -66,7 +86,7 @@ function QuestionWidget({
         alt="Descrição"
         style={{
           width: '100%',
-          height: '150px',
+          height: '160px',
           objectFit: 'cover',
         }}
         src={question.image}
@@ -94,17 +114,20 @@ function QuestionWidget({
             return (
               <Widget.Topic
                 as="label"
+                selected={isSelected}
                 htmlFor={alternativeId}
                 key={alternativeId}
                 data-selected={isSelected}
                 data-status={isQuestionSubmited && alternativeStatus}
               >
                 <input
-                  // style={{ display: 'none' }}
+                  style={{ display: 'none' }}
                   id={alternativeId}
                   name={questionId}
                   type="radio"
-                  onChange={() => setSelectedAlternative(alternativeIndex)}
+                  onChange={() => {
+                    setSelectedAlternative(alternativeIndex);
+                  }}
                 />
                 {alternative}
               </Widget.Topic>
@@ -139,7 +162,6 @@ export default function QuizPage() {
   function addResult(result) {
     setResults([...results, result]);
   }
-
   React.useEffect(() => {
     // fetch() ...
     setTimeout(() => {

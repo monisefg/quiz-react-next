@@ -64,6 +64,7 @@ export default function Home() {
               }}
             >
               <Input
+                autoFocus
                 placeholder="Seu nome"
                 name={name}
                 value={name}
@@ -104,7 +105,17 @@ export default function Home() {
                   <li key={item}>
                     <Widget.Topic
                       as={Link}
-                      href={`/quiz/${projectName}___${githubUser}`}
+                      href={
+                        !name
+                          ? '/'
+                          : `/quiz/${projectName}___${githubUser}?name=${name}`
+                      }
+                      title={!name ? 'Escreva seu nome' : ''}
+                      style={
+                        !name
+                          ? { cursor: 'not-allowed' }
+                          : { cursor: 'pointer' }
+                      }
                     >
                       {`${githubUser}/${projectName}`}
                     </Widget.Topic>
