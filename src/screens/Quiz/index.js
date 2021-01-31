@@ -9,7 +9,7 @@ import AlternativesForm from '../../components/AlternativesForm';
 import Button from '../../components/Button';
 import BackLinkArrow from '../../components/BackLinkArrow';
 
-import loadingAnimation from './animations/loading.json';
+import loadingAnimation from './animations/Loading.json';
 
 function ResultWidget({ results }) {
   return (
